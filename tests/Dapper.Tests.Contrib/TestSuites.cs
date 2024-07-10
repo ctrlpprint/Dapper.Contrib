@@ -38,11 +38,11 @@ namespace Dapper.Tests.Contrib
                 void dropTable(string name) => connection.Execute($"IF OBJECT_ID('{name}', 'U') IS NOT NULL DROP TABLE [{name}]; ");
                 connection.Open();
                 dropTable("Stuff");
-                connection.Execute("CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, Created DateTime null);");
+                connection.Execute("CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, CreatedAt DateTime null);");
                 dropTable("People");
                 connection.Execute("CREATE TABLE People (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
                 dropTable("Users");
-                connection.Execute("CREATE TABLE Users (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, Age int not null);");
+                connection.Execute("CREATE TABLE Users (Id int IDENTITY(1,1) not null, UserName nvarchar(100) not null, Age int not null);");
                 dropTable("Automobiles");
                 connection.Execute("CREATE TABLE Automobiles (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
                 dropTable("Results");
@@ -80,11 +80,11 @@ namespace Dapper.Tests.Contrib
                 void dropTable(string name) => connection.Execute($"IF OBJECT_ID('{name}', 'U') IS NOT NULL DROP TABLE [{name}]; ");
                 connection.Open();
                 dropTable("Stuff");
-                connection.Execute("CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, Created DateTime null);");
+                connection.Execute("CREATE TABLE Stuff (The_Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, CreatedAt DateTime null);");
                 dropTable("People");
                 connection.Execute("CREATE TABLE People (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
                 dropTable("Users");
-                connection.Execute("CREATE TABLE Users (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, Age int not null);");
+                connection.Execute("CREATE TABLE Users (Id int IDENTITY(1,1) not null, User_Name nvarchar(100) not null, Age int not null);");
                 dropTable("Automobiles");
                 connection.Execute("CREATE TABLE Automobiles (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
                 dropTable("Results");
@@ -176,9 +176,9 @@ namespace Dapper.Tests.Contrib
             using (var connection = new SqliteConnection(ConnectionString))
             {
                 connection.Open();
-                connection.Execute("CREATE TABLE Stuff (TheId integer primary key autoincrement not null, Name nvarchar(100) not null, Created DateTime null) ");
+                connection.Execute("CREATE TABLE Stuff (TheId integer primary key autoincrement not null, Name nvarchar(100) not null, CreatedAt DateTime null) ");
                 connection.Execute("CREATE TABLE People (Id integer primary key autoincrement not null, Name nvarchar(100) not null) ");
-                connection.Execute("CREATE TABLE Users (Id integer primary key autoincrement not null, Name nvarchar(100) not null, Age int not null) ");
+                connection.Execute("CREATE TABLE Users (Id integer primary key autoincrement not null, User_Name nvarchar(100) not null, Age int not null) ");
                 connection.Execute("CREATE TABLE Automobiles (Id integer primary key autoincrement not null, Name nvarchar(100) not null) ");
                 connection.Execute("CREATE TABLE Results (Id integer primary key autoincrement not null, Name nvarchar(100) not null, [Order] int not null) ");
                 connection.Execute("CREATE TABLE ObjectX (ObjectXId nvarchar(100) not null, Name nvarchar(100) not null) ");
@@ -209,9 +209,9 @@ namespace Dapper.Tests.Contrib
             using (var connection = new SqlCeConnection(ConnectionString))
             {
                 connection.Open();
-                connection.Execute(@"CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, Created DateTime null) ");
+                connection.Execute(@"CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, CreatedAt DateTime null) ");
                 connection.Execute(@"CREATE TABLE People (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null) ");
-                connection.Execute(@"CREATE TABLE Users (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, Age int not null) ");
+                connection.Execute(@"CREATE TABLE Users (Id int IDENTITY(1,1) not null, User_Name nvarchar(100) not null, Age int not null) ");
                 connection.Execute(@"CREATE TABLE Automobiles (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null) ");
                 connection.Execute(@"CREATE TABLE Results (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, [Order] int not null) ");
                 connection.Execute(@"CREATE TABLE ObjectX (ObjectXId nvarchar(100) not null, Name nvarchar(100) not null) ");
