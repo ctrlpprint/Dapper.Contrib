@@ -19,6 +19,7 @@ namespace Dapper.Tests.Contrib
     {
     }
 
+    [Collection("Sequential")]
     public class SqlServerTestSuite : TestSuite
     {
         private const string DbName = "tempdb";
@@ -29,6 +30,8 @@ namespace Dapper.Tests.Contrib
 
         static SqlServerTestSuite()
         {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = false;
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 // ReSharper disable once AccessToDisposedClosure
@@ -58,6 +61,48 @@ namespace Dapper.Tests.Contrib
         }
     }
 
+    [Collection("Sequential")]
+    public class SqlServerUnderscoreTestSuite : TestSuite
+    {
+        private const string DbName = "tempdb";
+        public static string ConnectionString =>
+            GetConnectionString("SqlServerConnectionString", $"Data Source=.;Initial Catalog={DbName};Integrated Security=True");
+
+        public override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
+
+        static SqlServerUnderscoreTestSuite()
+        {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                // ReSharper disable once AccessToDisposedClosure
+                void dropTable(string name) => connection.Execute($"IF OBJECT_ID('{name}', 'U') IS NOT NULL DROP TABLE [{name}]; ");
+                connection.Open();
+                dropTable("Stuff");
+                connection.Execute("CREATE TABLE Stuff (TheId int IDENTITY(1,1) not null, Name nvarchar(100) not null, Created DateTime null);");
+                dropTable("People");
+                connection.Execute("CREATE TABLE People (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
+                dropTable("Users");
+                connection.Execute("CREATE TABLE Users (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, Age int not null);");
+                dropTable("Automobiles");
+                connection.Execute("CREATE TABLE Automobiles (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
+                dropTable("Results");
+                connection.Execute("CREATE TABLE Results (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, [Order] int not null);");
+                dropTable("ObjectX");
+                connection.Execute("CREATE TABLE ObjectX (ObjectXId nvarchar(100) not null, Name nvarchar(100) not null);");
+                dropTable("ObjectY");
+                connection.Execute("CREATE TABLE ObjectY (ObjectYId int not null, Name nvarchar(100) not null);");
+                dropTable("ObjectZ");
+                connection.Execute("CREATE TABLE ObjectZ (Id int not null, Name nvarchar(100) not null);");
+                dropTable("GenericType");
+                connection.Execute("CREATE TABLE GenericType (Id nvarchar(100) not null, Name nvarchar(100) not null);");
+                dropTable("NullableDates");
+                connection.Execute("CREATE TABLE NullableDates (Id int IDENTITY(1,1) not null, Date_Value DateTime null);");
+            }
+        }
+    }
+
     public class MySqlServerTestSuite : TestSuite
     {
         public static string ConnectionString { get; } =
@@ -73,6 +118,8 @@ namespace Dapper.Tests.Contrib
 
         static MySqlServerTestSuite()
         {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = false;
+
             try
             {
                 using (var connection = new MySqlConnection(ConnectionString))
@@ -120,6 +167,8 @@ namespace Dapper.Tests.Contrib
 
         static SQLiteTestSuite()
         {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = false;
+
             if (File.Exists(FileName))
             {
                 File.Delete(FileName);
