@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Dapper.Contrib.Extensions;
-using Xunit;
-
-using FactAttribute = Dapper.Tests.Contrib.SkippableFactAttribute;
+﻿using Xunit;
 
 namespace Dapper.Tests.Contrib
 {
-    public class PascalToCamelCasingTests
+    public class PascalToSnakeCasingTests
     {
         [Fact]
-        public void ConvertToCamelCase()
+        public void ConvertToSnakeCase()
         {
-            Assert.Equal("Full_Name", ColumnMapping.PascalCaseToSnakeCase("FullName"));
-            Assert.Equal("The_Id", ColumnMapping.PascalCaseToSnakeCase("TheId"));
-            Assert.Equal("I_D", ColumnMapping.PascalCaseToSnakeCase("ID"));
+            Assert.Equal("full_name", ColumnMapping.PascalCaseToSnakeCase("FullName"));
+            Assert.Equal("the_id", ColumnMapping.PascalCaseToSnakeCase("TheId"));
+            Assert.Equal("i_d", ColumnMapping.PascalCaseToSnakeCase("ID"));
         }
     }
 }

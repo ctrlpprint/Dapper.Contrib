@@ -1228,9 +1228,10 @@ public static class ColumnMapping
     /// Because Dapper itself only uses property-column mappings for data reads,
     /// it only needed to strip underscores from column names; it did not have to
     /// decide on a casing convention for column names.
+    /// Typically underscores are used with lower case text.
     /// </remarks>
     public static string PascalCaseToSnakeCase(string pascalCaseString) {
         return string.Concat(pascalCaseString.Select((character, index)
-             => index > 0 && char.IsUpper(character) ? "_" + character.ToString() : character.ToString()));//.ToLower();
+             => index > 0 && char.IsUpper(character) ? "_" + character.ToString() : character.ToString())).ToLower();
     }
 }
