@@ -19,6 +19,21 @@ namespace Dapper.Tests.Contrib
     {
     }
 
+
+    /// <summary>
+    /// Disaplce parallel running of test suites. Because of the dependency on 
+    /// the static property <see cref="DefaultTypeMap.MatchNamesWithUnderscores"/>
+    /// parallel running wil break tests using different settings.
+    /// </summary>
+    /// <remarks>
+    /// https://stackoverflow.com/questions/1408175/execute-unit-tests-serially-rather-than-in-parallel
+    /// https://github.com/xunit/visualstudio.xunit/issues/191
+    /// </remarks>
+    [CollectionDefinition("Sequential", DisableParallelization = true)]
+    public class NonParallelCollectionDefinitionClass
+    {
+    }
+
     [Collection("Sequential")]
     public class SqlServerTestSuite : TestSuite
     {
@@ -80,7 +95,7 @@ namespace Dapper.Tests.Contrib
                 void dropTable(string name) => connection.Execute($"IF OBJECT_ID('{name}', 'U') IS NOT NULL DROP TABLE [{name}]; ");
                 connection.Open();
                 dropTable("Stuff");
-                connection.Execute("CREATE TABLE Stuff (The_Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, CreatedAt DateTime null);");
+                connection.Execute("CREATE TABLE Stuff (The_Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, Created_At DateTime null);");
                 dropTable("People");
                 connection.Execute("CREATE TABLE People (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null);");
                 dropTable("Users");
@@ -90,9 +105,9 @@ namespace Dapper.Tests.Contrib
                 dropTable("Results");
                 connection.Execute("CREATE TABLE Results (Id int IDENTITY(1,1) not null, Name nvarchar(100) not null, [Order] int not null);");
                 dropTable("ObjectX");
-                connection.Execute("CREATE TABLE ObjectX (ObjectXId nvarchar(100) not null, Name nvarchar(100) not null);");
+                connection.Execute("CREATE TABLE ObjectX (Object_X_Id nvarchar(100) not null, Name nvarchar(100) not null);");
                 dropTable("ObjectY");
-                connection.Execute("CREATE TABLE ObjectY (ObjectYId int not null, Name nvarchar(100) not null);");
+                connection.Execute("CREATE TABLE ObjectY (Object_Y_Id int not null, Name nvarchar(100) not null);");
                 dropTable("ObjectZ");
                 connection.Execute("CREATE TABLE ObjectZ (Id int not null, Name nvarchar(100) not null);");
                 dropTable("GenericType");
@@ -103,6 +118,7 @@ namespace Dapper.Tests.Contrib
         }
     }
 
+    [Collection("Sequential")]
     public class MySqlServerTestSuite : TestSuite
     {
         public static string ConnectionString { get; } =
@@ -132,7 +148,7 @@ namespace Dapper.Tests.Contrib
                     dropTable("People");
                     connection.Execute("CREATE TABLE People (Id int not null AUTO_INCREMENT PRIMARY KEY, Name nvarchar(100) not null);");
                     dropTable("Users");
-                    connection.Execute("CREATE TABLE Users (Id int not null AUTO_INCREMENT PRIMARY KEY, Name nvarchar(100) not null, Age int not null);");
+                    connection.Execute("CREATE TABLE Users (Id int not null AUTO_INCREMENT PRIMARY KEY, UserName nvarchar(100) not null, Age int not null);");
                     dropTable("Automobiles");
                     connection.Execute("CREATE TABLE Automobiles (Id int not null AUTO_INCREMENT PRIMARY KEY, Name nvarchar(100) not null);");
                     dropTable("Results");
@@ -159,6 +175,7 @@ namespace Dapper.Tests.Contrib
         }
     }
 
+    [Collection("Sequential")]
     public class SQLiteTestSuite : TestSuite
     {
         private const string FileName = "Test.DB.sqlite";
@@ -178,7 +195,7 @@ namespace Dapper.Tests.Contrib
                 connection.Open();
                 connection.Execute("CREATE TABLE Stuff (TheId integer primary key autoincrement not null, Name nvarchar(100) not null, CreatedAt DateTime null) ");
                 connection.Execute("CREATE TABLE People (Id integer primary key autoincrement not null, Name nvarchar(100) not null) ");
-                connection.Execute("CREATE TABLE Users (Id integer primary key autoincrement not null, User_Name nvarchar(100) not null, Age int not null) ");
+                connection.Execute("CREATE TABLE Users (Id integer primary key autoincrement not null, UserName nvarchar(100) not null, Age int not null) ");
                 connection.Execute("CREATE TABLE Automobiles (Id integer primary key autoincrement not null, Name nvarchar(100) not null) ");
                 connection.Execute("CREATE TABLE Results (Id integer primary key autoincrement not null, Name nvarchar(100) not null, [Order] int not null) ");
                 connection.Execute("CREATE TABLE ObjectX (ObjectXId nvarchar(100) not null, Name nvarchar(100) not null) ");
@@ -192,7 +209,8 @@ namespace Dapper.Tests.Contrib
 
 
 #if SQLCE
-    public class SqlCETestSuite : TestSuite
+   [Collection("Sequential")]
+   public class SqlCETestSuite : TestSuite
     {
         const string FileName = "Test.DB.sdf";
         public static string ConnectionString => $"Data Source={FileName};";

@@ -237,7 +237,8 @@ namespace Dapper.Tests.Contrib
 
                 var builder = new SqlBuilder();
                 var justId = builder.AddTemplate("SELECT /**select**/ FROM Users");
-                var all = builder.AddTemplate("SELECT Name, /**select**/, Age FROM Users");
+                var isUnderscored = DefaultTypeMap.MatchNamesWithUnderscores;
+                var all = builder.AddTemplate($"SELECT User{(isUnderscored ? "_" : "")}Name, /**select**/, Age FROM Users");
 
                 builder.Select("Id");
 
