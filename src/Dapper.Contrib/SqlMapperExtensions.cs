@@ -945,7 +945,7 @@ public partial class SqlCeServerAdapter : ISqlAdapter
     public void AppendColumnNameEqualsValue(StringBuilder sb, string propertyName)
     {
         var columnName = ColumnMapping.ColumnName(propertyName);
-        sb.AppendFormat("[{0}] = @{1}", columnName, columnName);
+        sb.AppendFormat("[{0}] = @{1}", columnName, propertyName);
     }
 }
 
@@ -1002,7 +1002,7 @@ public partial class MySqlAdapter : ISqlAdapter
     public void AppendColumnNameEqualsValue(StringBuilder sb, string propertyName)
     {
         var columnName = ColumnMapping.ColumnName(propertyName);
-        sb.AppendFormat("`{0}` = @{1}", columnName, columnName);
+        sb.AppendFormat("`{0}` = @{1}", columnName, propertyName);
     }
 }
 
@@ -1080,7 +1080,7 @@ public partial class PostgresAdapter : ISqlAdapter
     public void AppendColumnNameEqualsValue(StringBuilder sb, string propertyName)
     {
         var columnName = ColumnMapping.ColumnName(propertyName);
-        sb.AppendFormat("\"{0}\" = @{1}", columnName, columnName);
+        sb.AppendFormat("\"{0}\" = @{1}", columnName, propertyName);
     }
 }
 
@@ -1135,7 +1135,7 @@ public partial class SQLiteAdapter : ISqlAdapter
     public void AppendColumnNameEqualsValue(StringBuilder sb, string propertyName)
     {
         var columnName = ColumnMapping.ColumnName(propertyName);
-        sb.AppendFormat("\"{0}\" = @{1}", columnName, columnName);
+        sb.AppendFormat("\"{0}\" = @{1}", columnName, propertyName);
     }
 }
 

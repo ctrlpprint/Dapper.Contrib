@@ -176,6 +176,39 @@ namespace Dapper.Tests.Contrib
     }
 
     [Collection("Sequential")]
+    public class SQLiteUnderscoreTestSuite : TestSuite
+    {
+        // Use a different file name to the SQLiteTestSuite to avoid the test runner attempting to interact with the same file.
+        private const string FileName = "Test.DB.Undescore.sqlite";
+        public static string ConnectionString => $"Filename=./{FileName};Mode=ReadWriteCreate;";
+        public override IDbConnection GetConnection() => new SqliteConnection(ConnectionString);
+
+        static SQLiteUnderscoreTestSuite()
+        {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+            if (File.Exists(FileName))
+            {
+                File.Delete(FileName);
+            }
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
+                connection.Execute("CREATE TABLE Stuff (the_id integer primary key autoincrement not null, Name nvarchar(100) not null, created_at DateTime null) ");
+                connection.Execute("CREATE TABLE People (id integer primary key autoincrement not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE Users (id integer primary key autoincrement not null, user_name nvarchar(100) not null, age int not null) ");
+                connection.Execute("CREATE TABLE Automobiles (id integer primary key autoincrement not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE Results (id integer primary key autoincrement not null, name nvarchar(100) not null, [order] int not null) ");
+                connection.Execute("CREATE TABLE ObjectX (object_x_id nvarchar(100) not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE ObjectY (object_y_id integer not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE ObjectZ (id integer not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE GenericType (id nvarchar(100) not null, name nvarchar(100) not null) ");
+                connection.Execute("CREATE TABLE NullableDates (id integer primary key autoincrement not null, date_value DateTime) ");
+            }
+        }
+    }
+
+    [Collection("Sequential")]
     public class SQLiteTestSuite : TestSuite
     {
         private const string FileName = "Test.DB.sqlite";
